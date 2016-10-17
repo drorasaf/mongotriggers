@@ -1,15 +1,32 @@
-import pymongo
-import threading
+import time
+from pymongo import CursorType
 
 
-# TODO: verify connection is mongod, if mongos, connect to all mongod instead
+# TODO: if mongos, connect to all mongod instead
 # TODO: create replicaset trigger which relies on majority of oplogs
-class MongodTrigger(threading.Thread):
+class MongodTrigger(object):
 
-    def __init__(self, conn):
-        # TODO: verify triggering is available using oplog, must be part of replica set
+    def __init__(self, conn, listen_time=None):
         self._oplog = conn.local.oplog.rs
+        self._verify_mongod_with_oplog(conn)
+        if listen_time is None:
+            self._start_time = \
+                self._oplog.find({'fromMigrate': {'$exists': False}}).sort('$natural', -1)[0]['ts']
+        else:
+            self._start_time = listen_time
         self._callbacks = []
+        self.keep_listening = True
+
+    def _verify_mongod_with_oplog(self, conn):
+        if conn.is_mongos:
+            raise TypeError('Connection must be mongod, but it is mongos')
+        if not conn.is_primary:
+            raise TypeError('Connection must be primary, but it is not')
+        doc = self._oplog.find_one()
+        if doc is None:
+            raise TypeError('Connection must have oplog enable, try restart service as '
+                            'replicaset of a single server, for more details see '
+                            'https://jira.mongodb.org/browse/SERVER-12039')
 
     def _generate_namespace(self, db_name, collection_name):
         # TODO: allow partial namespace
@@ -34,19 +51,21 @@ class MongodTrigger(threading.Thread):
 
     def listen_stop(self):
         self.keep_listening = False
-        # XXX: is it possible?
-        # self.join()
 
-    # TODO: currently must be created in a defered context
     def listen_start(self):
-        self.keep_listening = True
         # remove shard operations
         query = {'fromMigrate': {'$exists': False}}
-        while self.keep_listening:
-            tailable_cur = self._oplog.find(query, cursor_type=pymongo.CursorType.TAILABLE)
-            for op in tailable_cur:
-                print (op)
+        if self._start_time:
+            query.update({'ts': {'$gt': self._start_time}})
+
+        tailable_cur = self._oplog.find(query,
+                                        cursor_type=CursorType.TAILABLE_AWAIT).sort('$natural', 1)
+        while tailable_cur.alive and self.keep_listening:
+            try:
+                op = tailable_cur.next()
                 self._invoke_callbacks(op)
+            except StopIteration:
+                time.sleep(1)
 
     def _invoke_callbacks(self, op_doc):
         for callback in self._callbacks:
