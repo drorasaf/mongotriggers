@@ -1,5 +1,5 @@
-import time
 from pymongo import CursorType
+import time
 
 
 # if mongos, connect to all mongod instead
