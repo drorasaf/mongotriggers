@@ -1,11 +1,10 @@
 MongoTriggers
 =============
-
 .. image:: https://api.travis-ci.org/drorasaf/mongodb-triggers.svg?branch=master
         :target: https://travis-ci.org/drorasaf/mongodb-triggers
 
-.. image:: https://coveralls.io/repos/drorasaf/mongodb-triggers/badge.svg?branch=master
-        :target: https://coveralls.io/r/drorasaf/mongodb-triggers
+.. image:: https://coveralls.io/repos/github/drorasaf/mongodb-triggers/badge.svg?branch=master
+        :target: https://coveralls.io/github/drorasaf/mongodb-triggers?branch=master
 
 .. image:: https://img.shields.io/pypi/v/mongodb-triggers.svg
         :target: https://pypi.python.org/pypi/mongodb-triggers
