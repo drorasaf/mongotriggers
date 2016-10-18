@@ -17,8 +17,16 @@ def connection(request):
 
 @pytest.fixture
 def trigger(connection):
-    mongotrigger = mongotriggers.MongodTrigger(connection, None)
+    mongotrigger = mongotriggers.MongodTrigger(connection)
     return mongotrigger
+
+
+@pytest.fixture(scope='function')
+def database(connection, request):
+    def fin():
+        connection.drop_database('test')
+    request.addfinalizer(fin)
+    return connection['test']
 
 
 def basic_trigger(trigger, func, *argfunc):
@@ -26,43 +34,43 @@ def basic_trigger(trigger, func, *argfunc):
     thread.start()
     func(*argfunc)
 
-    time.sleep(1)
+    time.sleep(3)
     trigger.listen_stop()
     thread.join()
 
 
-def test_single_insert(connection, trigger, capsys):
+def test_single_insert(database, trigger, capsys):
     def insert(op_doc):
         print('insert')
-    trigger.register_insert_trigger(insert, 'test', 'insert_trigger')
-    basic_trigger(trigger, connection['test']['insert_trigger'].insert, {'a': 1})
+    trigger.register_insert_trigger(insert, database.name, 'insert_trigger')
+    basic_trigger(trigger, database['insert_trigger'].insert, {'a': 1})
     out, err = capsys.readouterr()
     assert out == 'insert\n'
 
 
-def test_single_update(connection, trigger, capsys):
+def test_single_update(database, trigger, capsys):
     def update(op_doc):
         print('update')
 
-    def operations(connection):
-        connection['test']['update_trigger'].insert({'a': 1})
-        connection['test']['update_trigger'].update({}, {'a': 2})
+    def operations(database):
+        database['update_trigger'].insert({'a': 1})
+        database['update_trigger'].update({}, {'a': 2})
 
-    trigger.register_update_trigger(update, 'test', 'update_trigger')
-    basic_trigger(trigger, operations, connection)
+    trigger.register_update_trigger(update, database.name, 'update_trigger')
+    basic_trigger(trigger, operations, database)
     out, err = capsys.readouterr()
     assert out == 'update\n'
 
 
-def test_single_delete(connection, trigger, capsys):
+def test_single_delete(database, trigger, capsys):
     def delete(op_doc):
         print('delete')
 
-    def operations(connection):
-        connection['test']['delete_trigger'].insert({'a': 3})
-        connection['test']['delete_trigger'].remove({'a': 3})
+    def operations(database):
+        database['delete_trigger'].insert({'a': 3})
+        database['delete_trigger'].remove({'a': 3})
 
-    trigger.register_delete_trigger(delete, 'test', 'delete_trigger')
-    basic_trigger(trigger, operations, connection)
+    trigger.register_delete_trigger(delete, database.name, 'delete_trigger')
+    basic_trigger(trigger, operations, database)
     out, err = capsys.readouterr()
     assert out == 'delete\n'

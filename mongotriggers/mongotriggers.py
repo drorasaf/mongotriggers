@@ -2,8 +2,8 @@ import time
 from pymongo import CursorType
 
 
-# TODO: if mongos, connect to all mongod instead
-# TODO: create replicaset trigger which relies on majority of oplogs
+# if mongos, connect to all mongod instead
+# create replicaset trigger which relies on majority of oplogs
 class MongodTrigger(object):
 
     def __init__(self, conn, listen_time=None):
@@ -29,12 +29,12 @@ class MongodTrigger(object):
                             'https://jira.mongodb.org/browse/SERVER-12039')
 
     def _generate_namespace(self, db_name, collection_name):
-        # TODO: allow partial namespace
+        # allow partial namespace
         assert db_name and collection_name
         return db_name + '.' + collection_name
 
     def register_insert_trigger(self, func, db_name=None, collection_name=None):
-        # TODO: get op name from pymongo?
+        #  get op name from pymongo?
         ns = self._generate_namespace(db_name, collection_name)
         callback = {'op': 'i', 'ns': ns, 'func': func}
         self._callbacks.append(callback)
