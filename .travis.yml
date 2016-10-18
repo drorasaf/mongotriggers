@@ -19,6 +19,7 @@ before_install:
   - "sudo service mongod restart"
 before_script:
   - "until nc -z localhost 27017; do echo Waiting for MongoDB; sleep 1; done"
+  - "hostname | sed 's/^/127.0.0.1 /' | sudo tee -a /etc/hosts"
   - "mongo --eval 'rs.initiate()'"
   - "until [ `mongo --eval 'rs.isMaster()' | grep ismaster | awk '{print $3}'` = 'true,' ] ; do echo 'Waiting for Primary'; sleep 1; done"
 install: pip install tox
