@@ -73,9 +73,9 @@ Testing
 =======
 In order to develop, the additional requirements are:
 
- - pytest
- - pytest-cov
- - tox
+- pytest
+- pytest-cov
+- tox
 
 All packages can be installed using pip.
 The easiest way to run the tests is to run tox.
