@@ -1,17 +1,17 @@
 =============
 MongoTriggers
 =============
-.. image:: https://api.travis-ci.org/drorasaf/mongodb-triggers.svg?branch=master
-        :target: https://travis-ci.org/drorasaf/mongodb-triggers
+.. image:: https://api.travis-ci.org/drorasaf/mongotriggers.svg?branch=master
+        :target: https://travis-ci.org/drorasaf/mongotriggers
 
-.. image:: https://coveralls.io/repos/github/drorasaf/mongodb-triggers/badge.svg?branch=master
-        :target: https://coveralls.io/github/drorasaf/mongodb-triggers?branch=master
+.. image:: https://coveralls.io/repos/github/drorasaf/mongotriggers/badge.svg?branch=master
+        :target: https://coveralls.io/github/drorasaf/mongotriggers?branch=master
 
-.. image:: https://img.shields.io/pypi/v/mongodb-triggers.svg
-        :target: https://pypi.python.org/pypi/mongodb-triggers
+.. image:: https://img.shields.io/pypi/v/mongotriggers.svg
+        :target: https://pypi.python.org/pypi/mongotriggers
 
-.. image:: https://img.shields.io/pypi/dm/mongodb-triggers.svg
-        :target: https://pypi.python.org/pypi/mongodb-triggers
+.. image:: https://img.shields.io/pypi/dm/mongotriggers.svg
+        :target: https://pypi.python.org/pypi/mongotriggers
 
 What is this?
 -------------
