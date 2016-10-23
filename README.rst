@@ -1,16 +1,17 @@
+=============
 MongoTriggers
 =============
-.. image:: https://api.travis-ci.org/drorasaf/mongodb-triggers.svg?branch=master
-        :target: https://travis-ci.org/drorasaf/mongodb-triggers
+.. image:: https://api.travis-ci.org/drorasaf/mongotriggers.svg?branch=master
+        :target: https://travis-ci.org/drorasaf/mongotriggers
 
-.. image:: https://coveralls.io/repos/github/drorasaf/mongodb-triggers/badge.svg?branch=master
-        :target: https://coveralls.io/github/drorasaf/mongodb-triggers?branch=master
+.. image:: https://coveralls.io/repos/github/drorasaf/mongotriggers/badge.svg?branch=master
+        :target: https://coveralls.io/github/drorasaf/mongotriggers?branch=master
 
-.. image:: https://img.shields.io/pypi/v/mongodb-triggers.svg
-        :target: https://pypi.python.org/pypi/mongodb-triggers
+.. image:: https://img.shields.io/pypi/v/mongotriggers.svg
+        :target: https://pypi.python.org/pypi/mongotriggers
 
-.. image:: https://img.shields.io/pypi/dm/mongodb-triggers.svg
-        :target: https://pypi.python.org/pypi/mongodb-triggers
+.. image:: https://img.shields.io/pypi/dm/mongotriggers.svg
+        :target: https://pypi.python.org/pypi/mongotriggers
 
 What is this?
 -------------
@@ -18,20 +19,20 @@ mongodb-triggers is a light-weight library to allow trigger capabilities with mo
 the triggers are similar to ones that can be found in RDBM, although it is not on the server side but on the client side.
 
 What is it good for?
---------------------
+====================
 Modern applications have become near real-time response and updates, this leads to the requirement that any changes done in the data to be propagated up to the top level of the application as soon as possible.
 
 In order to allow this to happen, any changes in the databases must be notified, similar project that use this method is https://github.com/meteor/meteor.
 
 Installation
-------------
+============
 
 PyInstaller is available on PyPI. You can install it through pip::
 
     $ pip install mongotriggers
 
 How to use?
------------
+===========
 Let's assume the system in development is a financial one, and every deletion in the database is extremely important, so we would like to notified for each deletion.
 
 
@@ -58,7 +59,7 @@ Let's assume the system in development is a financial one, and every deletion in
 Keep in mind that it is meant to run in a defered context in order to run endlessly until it is cancelled.
 
 API
----
+===
 The API functionality includes:
 
 - register_insert_trigger  
@@ -66,3 +67,15 @@ The API functionality includes:
 - register_delete_trigger  
 - listen_start  
 - listen_stop  
+
+
+Testing
+=======
+In order to develop, the additional requirements are:
+
+- pytest
+- pytest-cov
+- tox
+
+All packages can be installed using pip.
+The easiest way to run the tests is to run tox.
