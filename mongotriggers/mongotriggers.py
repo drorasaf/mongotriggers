@@ -4,23 +4,23 @@ import time
 
 class MongoTrigger(object):
     def __init__(self, conn, listen_time=None):
-	# if mongos, connect to all mongod instead
-    	self.trigger = MongodTrigger(conn, listen_time)
+        # if mongos, connect to all mongod instead
+        self.trigger = MongodTrigger(conn, listen_time)
 
     def register_insert_trigger(self, func, db_name=None, collection_name=None):
-	self.trigger.register_insert_trigger(func, db_name, collection_name)
+        self.trigger.register_insert_trigger(func, db_name, collection_name)
 
     def register_update_trigger(self, func, db_name=None, collection_name=None):
-	self.trigger.register_update_trigger(func, db_name, collection_name)
+        self.trigger.register_update_trigger(func, db_name, collection_name)
 
     def register_delete_trigger(self, func, db_name=None, collection_name=None):
-	self.trigger.register_delete_trigger(func, db_name, collection_name)
+        self.trigger.register_delete_trigger(func, db_name, collection_name)
 
     def listen_stop(self):
         self.trigger.listen_stop()
 
     def listen_start(self):
-	self.trigger.listen_start()
+        self.trigger.listen_start()
 
 
 # create replicaset trigger which relies on majority of oplogs
