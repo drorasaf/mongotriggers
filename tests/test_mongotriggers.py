@@ -17,7 +17,7 @@ def connection(request):
 
 @pytest.fixture
 def trigger(connection):
-    mongotrigger = mongotriggers.MongodTrigger(connection)
+    mongotrigger = mongotriggers.MongoTrigger(connection)
     return mongotrigger
 
 
