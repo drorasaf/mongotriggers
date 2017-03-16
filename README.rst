@@ -31,6 +31,13 @@ PyInstaller is available on PyPI. You can install it through pip::
 
     $ pip install mongotriggers
 
+Why should I use it?
+===========
+The best functionality is the one that another one is maintaining for you, as well as near 100% code coverage.
+Please consider to use the following best practices published by MongoDB:
+https://www.mongodb.com/blog/post/tailing-mongodb-oplog-sharded-clusters
+https://www.mongodb.com/blog/post/pitfalls-and-workarounds-for-tailing-the-oplog-on-a-mongodb-sharded-cluster
+
 How to use?
 ===========
 Let's assume the system in development is a financial one, and every deletion in the database is extremely important, so we would like to notified for each deletion.
@@ -42,14 +49,15 @@ Let's assume the system in development is a financial one, and every deletion in
  from pymongo import MongoClient
 
  def notify_manager(op_document):
-     print ('wake up! someone is stealing money')
+     print ('wake up! someone is adding me money')
 
  def myfunc():
      client = MongoClient(host='localhost', port=27017)
      triggers = MongoTrigger(conn)
-     triggers.register_delete_trigger(notify_manager, 'my_account', 'my_transactions')
+     triggers.register_insert_trigger(notify_manager, 'my_account', 'my_transactions')
 
      triggers.start()
+     conn['my_account']['my_transactions'].insert_one({"balance": 1000})
      time.sleep(100)
      triggers.stop()
      
