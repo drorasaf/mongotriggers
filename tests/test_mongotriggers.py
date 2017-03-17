@@ -4,6 +4,34 @@ import pytest
 import threading
 import time
 
+@pytest.fixture
+def mongod_no_replica(request):
+    conn = pymongo.MongoClient(host='localhost', port=27018)
+
+    def fin():
+        conn.close()
+    request.addfinalizer(fin)
+    return conn
+
+
+def test_not_replica(mongod_no_replica):
+    with pytest.raises(TypeError):
+        mongotriggers.MongoTrigger(mongod_no_replica)
+
+
+@pytest.fixture
+def mongos(request):
+    conn = pymongo.MongoClient(host='localhost', port=27020)
+
+    def fin():
+        conn.close()
+    request.addfinalizer(fin)
+    return conn
+
+
+def test_mongos(mongos):
+    with pytest.raises(TypeError):
+        mongotriggers.MongoTrigger(mongos)
 
 @pytest.fixture
 def connection(request):

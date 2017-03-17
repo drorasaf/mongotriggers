@@ -15,6 +15,9 @@ before_install:
   - "echo 'replication:' | sudo tee -a /etc/mongod.conf"
   - "echo '  replSetName: ReplicaSet' | sudo tee -a /etc/mongod.conf"
   - "sudo service mongod restart"
+  - "mkdir /tmp/mongodb"
+  - "mongod --dbpath /tmp/mongodb --port 27018 &"
+  - "mongos --configdb localhost:27017 --port 27020 &"
 install:
   - pip install tox
   - pip install coveralls
