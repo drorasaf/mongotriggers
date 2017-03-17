@@ -26,6 +26,8 @@ before_script:
   - "hostname | sed 's/^/127.0.0.1 /' | sudo tee -a /etc/hosts"
   - "mongo --eval 'rs.initiate()'"
   - "until [ `mongo --eval 'rs.isMaster()' | grep ismaster | awk '{print $3}'` = 'true,' ] ; do echo 'Waiting for Primary'; sleep 1; done"
+  - "until [ `mongo --port 27018 --eval 'rs.isMaster()' | grep ismaster | awk '{print $3}'` = 'true,' ] ; do echo 'Waiting for non replica'; sleep 1; done"
+  - "until [ `mongo --port 27020 --eval 'rs.isMaster()' | grep ismaster | awk '{print $3}'` = 'true,' ] ; do echo 'Waiting for mongos'; sleep 1; done"
 script:
   - tox -e $TOX_ENV
 after_success:
