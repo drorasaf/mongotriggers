@@ -4,6 +4,7 @@ import pytest
 import threading
 import time
 
+
 @pytest.fixture
 def mongod_no_replica(request):
     conn = pymongo.MongoClient(host='localhost', port=27018)
@@ -32,6 +33,7 @@ def mongos(request):
 def test_mongos(mongos):
     with pytest.raises(TypeError):
         mongotriggers.MongoTrigger(mongos)
+
 
 @pytest.fixture
 def connection(request):
@@ -84,6 +86,7 @@ def test_single_operation(database, trigger, capsys):
     basic_trigger(trigger, operation)
     out, err = capsys.readouterr()
     assert out == ''
+
 
 def test_single_insert(database, trigger, capsys):
     def insert(op_doc):

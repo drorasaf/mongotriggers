@@ -5,8 +5,6 @@ import time
 class MongoTrigger(object):
 
     def __init__(self, conn, since=None):
-        # TODO: if mongos, connect to all mongod instead
-        # TODO: if majority is required, how to aggregate
         self.trigger = MongodTrigger(conn, since)
 
     def register_op_trigger(self, func, db_name=None, collection_name=None):
