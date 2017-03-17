@@ -3,6 +3,8 @@ import pymongo
 import pytest
 import threading
 import time
+import datetime
+import bson
 
 
 @pytest.fixture
@@ -135,3 +137,20 @@ def test_single_delete(database, trigger, capsys):
     basic_trigger(trigger, operations, database)
     out, err = capsys.readouterr()
     assert out == ''
+
+
+def test_tailing_from_specific_date(database, connection, capsys):
+    def delete(op_doc):
+        print('delete')
+
+    def operation():
+        pass
+
+    now = bson.timestamp.Timestamp(datetime.datetime.utcnow(), 0)
+    database['delete_trigger'].insert({'a': 3})
+    database['delete_trigger'].remove({'a': 3})
+    trigger = mongotriggers.MongoTrigger(connection, since=now)
+    trigger.register_delete_trigger(delete, database.name, 'delete_trigger')
+    basic_trigger(trigger, operation)
+    out, err = capsys.readouterr()
+    assert out == 'delete\n'

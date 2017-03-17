@@ -47,13 +47,13 @@ class MongodTrigger(object):
     def __init__(self, conn, since=None):
         self._oplog = conn.local.oplog.rs
         self._verify_mongod_with_oplog(conn)
-        if since is None:
-            self._start_time = \
-                self._oplog.find({'fromMigrate': {'$exists': False}}).sort('$natural', -1)[0]['ts']
-        else:
-            self._start_time = since
         self._callbacks = []
         self.keep_listening = True
+        if since is None:
+            query = {'fromMigrate': {'$exists': False}}
+            self._start_time = self._oplog.find(query).sort('$natural', -1)[0]['ts']
+        else:
+            self._start_time = since
 
     def _verify_mongod_with_oplog(self, conn):
         if conn.is_mongos:
