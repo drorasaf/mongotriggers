@@ -1,10 +1,10 @@
+import bson
+import datetime
 import mongotriggers
 import pymongo
 import pytest
 import threading
 import time
-import datetime
-import bson
 
 
 @pytest.fixture
