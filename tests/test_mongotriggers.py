@@ -8,13 +8,11 @@ import time
 
 
 @pytest.fixture
-def mongod_no_replica(request):
+def mongod_no_replica():
     conn = pymongo.MongoClient(host='localhost', port=27018)
 
-    def fin():
-        conn.close()
-    request.addfinalizer(fin)
-    return conn
+    yield conn
+    conn.close()
 
 
 def test_not_replica(mongod_no_replica):
@@ -23,13 +21,11 @@ def test_not_replica(mongod_no_replica):
 
 
 @pytest.fixture
-def mongos(request):
+def mongos():
     conn = pymongo.MongoClient(host='localhost', port=27020)
 
-    def fin():
-        conn.close()
-    request.addfinalizer(fin)
-    return conn
+    yield conn
+    conn.close()
 
 
 def test_mongos(mongos):
@@ -41,10 +37,8 @@ def test_mongos(mongos):
 def mongo_secondary(request):
     conn = pymongo.MongoClient(host='localhost', port=27019)
 
-    def fin():
-        conn.close()
-    request.addfinalizer(fin)
-    return conn
+    yield conn
+    conn.close()
 
 
 def test_mongo_replica_secondary(mongo_secondary):
@@ -53,13 +47,11 @@ def test_mongo_replica_secondary(mongo_secondary):
 
 
 @pytest.fixture
-def connection(request):
+def connection():
     conn = pymongo.MongoClient(host='localhost', port=27017)
 
-    def fin():
-        conn.close()
-    request.addfinalizer(fin)
-    return conn
+    yield conn
+    conn.close()
 
 
 @pytest.fixture
@@ -70,10 +62,8 @@ def trigger(connection):
 
 @pytest.fixture(scope='function')
 def database(connection, request):
-    def fin():
-        connection.drop_database('test')
-    request.addfinalizer(fin)
-    return connection['test']
+    connection.drop_database('test')
+    yield connection['test']
 
 
 def basic_trigger(trigger, func, *argfunc):
