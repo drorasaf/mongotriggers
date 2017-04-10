@@ -16,7 +16,7 @@ MongoTriggers
 What is this?
 -------------
 mongodb-triggers is a light-weight library to allow real live changes notification.
-This is similar to triggers in SQL. This capability can be found both in Java and JavaSCript(MeteorJS)
+This is similar to triggers in SQL. This capability can be found both in Java and JavaScript(MeteorJS)
 
 What is it good for?
 ====================
@@ -27,13 +27,13 @@ In order to allow this to happen, any changes in the databases must be notified,
 Installation
 ============
 
-PyInstaller is available on PyPI. You can install it through pip::
+Installer is available on PyPI. You can install it through pip::
 
     $ pip install mongotriggers
 
 Why should I use it?
 ===========
-The best functionality is the one that another one is maintaining for you, as well as near 100% code coverage.
+The best functionality is the one that another one is maintaining for you, as well as 100% code coverage.
 Please consider to use the following best practices published by MongoDB:
 https://www.mongodb.com/blog/post/tailing-mongodb-oplog-sharded-clusters
 https://www.mongodb.com/blog/post/pitfalls-and-workarounds-for-tailing-the-oplog-on-a-mongodb-sharded-cluster
