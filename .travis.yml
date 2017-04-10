@@ -35,3 +35,7 @@ script:
   - tox -e $TOX_ENV
 after_success:
   - coveralls
+after_script:
+  - mongo --port 27018 admin --eval "db.shutdownServer()"
+  - mongo --port 27019 admin --eval "db.shutdownServer()"
+  - mongo --port 27020 admin --eval "db.shutdownServer()"
