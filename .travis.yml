@@ -16,7 +16,9 @@ before_install:
   - "echo '  replSetName: ReplicaSet' | sudo tee -a /etc/mongod.conf"
   - "sudo service mongod restart"
   - "mkdir /tmp/mongodb"
+  - "mkdir /tmp/mongodb2"
   - "mongod --dbpath /tmp/mongodb --port 27018 &"
+  - "mongod --dbpath /tmp/mongodb2 --port 27019 --replSet ReplicaSet &"
   - "mongos --configdb localhost:27017 --port 27020 &"
 install:
   - pip install tox
@@ -25,6 +27,7 @@ before_script:
   - "until nc -z localhost 27017; do echo Waiting for MongoDB; sleep 1; done"
   - "hostname | sed 's/^/127.0.0.1 /' | sudo tee -a /etc/hosts"
   - "mongo --eval 'rs.initiate()'"
+  - "mongo --eval 'rs.add('localhost:27019')'"
   - "until [ `mongo --eval 'rs.isMaster()' | grep ismaster | awk '{print $3}'` = 'true,' ] ; do echo 'Waiting for Primary'; sleep 1; done"
   - "until [ `mongo --port 27018 --eval 'rs.isMaster()' | grep ismaster | awk '{print $3}'` = 'true,' ] ; do echo 'Waiting for non replica'; sleep 1; done"
   - "until [ `mongo --port 27020 --eval 'rs.isMaster()' | grep ismaster | awk '{print $3}'` = 'true,' ] ; do echo 'Waiting for mongos'; sleep 1; done"

@@ -38,6 +38,21 @@ def test_mongos(mongos):
 
 
 @pytest.fixture
+def mongo_secondary(request):
+    conn = pymongo.MongoClient(host='localhost', port=27019)
+
+    def fin():
+        conn.close()
+    request.addfinalizer(fin)
+    return conn
+
+
+def test_mongo_replica_secondary(mongo_secondary):
+    with pytest.raises(TypeError):
+        mongotriggers.MongoTrigger(mongo_secondary)
+
+
+@pytest.fixture
 def connection(request):
     conn = pymongo.MongoClient(host='localhost', port=27017)
 
