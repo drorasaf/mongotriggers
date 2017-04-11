@@ -8,6 +8,13 @@ class MongoTrigger(object):
         self.trigger = MongodTrigger(conn, since)
 
     def register_op_trigger(self, func, db_name=None, collection_name=None):
+        """
+        Watches the specified database and collections for any changes
+        Args:
+            func (callback): function to be invoked when operation occurs
+            db_name (str): name of Mongo database to watch for changes
+            collection_name (str): name of Mongo collection to watch for changes
+        """
         self.trigger.register_insert_trigger(func, db_name, collection_name)
         self.trigger.register_update_trigger(func, db_name, collection_name)
         self.trigger.register_delete_trigger(func, db_name, collection_name)
