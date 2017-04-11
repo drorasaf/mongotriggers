@@ -13,6 +13,10 @@ MongoTriggers
 .. image:: https://img.shields.io/pypi/dm/mongotriggers.svg
         :target: https://pypi.python.org/pypi/mongotriggers
 
+.. image:: https://readthedocs.org/projects/mongotriggers/badge/?version=latest
+        :target: http://mongotriggers.readthedocs.io/en/latest/?badge=latest
+        :alt: Documentation Status
+
 What is this?
 -------------
 mongodb-triggers is a light-weight library to allow real live changes notification.
@@ -34,9 +38,9 @@ Installer is available on PyPI. You can install it through pip::
 Why should I use it?
 ===========
 The best functionality is the one that another one is maintaining for you, as well as 100% code coverage.
-Please consider to use the following best practices published by MongoDB:
-https://www.mongodb.com/blog/post/tailing-mongodb-oplog-sharded-clusters
-https://www.mongodb.com/blog/post/pitfalls-and-workarounds-for-tailing-the-oplog-on-a-mongodb-sharded-cluster
+This package follows best practices as published by MongoDB: 
+ - https://www.mongodb.com/blog/post/tailing-mongodb-oplog-sharded-clusters
+ - https://www.mongodb.com/blog/post/pitfalls-and-workarounds-for-tailing-the-oplog-on-a-mongodb-sharded-cluster  
 
 How to use?
 ===========
@@ -63,6 +67,8 @@ Let's assume the system in development is a financial one, and every deletion in
      
 
 Keep in mind that it is meant to run in a defered context in order to run endlessly until it is cancelled.
+
+Documentation can be found at http://mongotriggers.readthedocs.io
 
 API
 ===
