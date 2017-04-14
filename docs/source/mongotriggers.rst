@@ -1,6 +1,11 @@
 mongotriggers package
 =====================
 
+.. automodule:: mongotriggers
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 Submodules
 ----------
 
@@ -13,10 +18,3 @@ mongotriggers\.mongotriggers module
     :show-inheritance:
 
 
-Module contents
----------------
-
-.. automodule:: mongotriggers
-    :members:
-    :undoc-members:
-    :show-inheritance:
