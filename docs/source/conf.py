@@ -19,7 +19,7 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../../'))
+sys.path.insert(0, os.path.abspath('../..'))
 
 
 # -- General configuration ------------------------------------------------
@@ -33,6 +33,7 @@ sys.path.insert(0, os.path.abspath('../../'))
 # ones.
 extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.coverage',
+              'sphinx.ext.viewcode',
               'sphinx.ext.napoleon']
 
 napoleon_google_docstring = True
