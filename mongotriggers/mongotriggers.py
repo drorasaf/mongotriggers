@@ -1,6 +1,8 @@
 from pymongo import CursorType
 import time
 
+"""Class for manipulating notifications from MongoDB """
+
 
 class MongoTrigger(object):
 

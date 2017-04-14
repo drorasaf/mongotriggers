@@ -16,10 +16,10 @@ Index
 
 * :doc:`install`
 * :doc:`examples`
-* :doc:`API`
+* :doc:`api`
 
 .. toctree::
-   :maxdepth:1
+   :maxdepth: 1
    :hidden:
    :caption: Getting Started
 
@@ -32,9 +32,8 @@ Index
 * :doc:`support`
 
 .. toctree::
-   :maxdepth:1
+   :maxdepth: 1
    :hidden:
    :caption: Help & reference
 
    support.rst
-   faq.rst
