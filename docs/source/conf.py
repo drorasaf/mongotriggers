@@ -32,12 +32,13 @@
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = ['sphinx.ext.autodoc',
-              'sphinx.ext.autosummary'
+              'sphinx.ext.autosummary',
               'sphinx.ext.coverage',
               'sphinx.ext.napoleon',
               'sphinx.ext.githubpages']
 
 napoleon_google_docstring = True
+
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
