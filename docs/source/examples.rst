@@ -5,6 +5,7 @@ Simple
 ------
 
 This example provide the simplest option for using the package.
+
 .. code-block:: python
 
     from mongotrigger import MongoTrigger

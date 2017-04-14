@@ -16,6 +16,7 @@ Index
 
 * :doc:`install`
 * :doc:`examples`
+* :doc:`API`
 
 .. toctree::
    :maxdepth:1
@@ -24,7 +25,7 @@ Index
 
    install.rst
    examples.rst
-   mongotriggers.rst
+   api.rst
 
 **Help & Reference**
 
