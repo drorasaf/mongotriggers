@@ -6,8 +6,11 @@
 Welcome to mongotriggers's documentation!
 =========================================
 
-This package provides a pythonic interface to allow real time updating, when MongoDB is updated, this update could be up to application layer, or just reside in the backend of the application.
-Modern applications are event-driven and not query-driven, therefore whenever there is an update, the application would like to receive a feedback. This package enables this kind of behaviour.
+This package provides a pythonic interface to allow real time updating, when MongoDB is updated,
+this update could be up to application layer, or just reside in the backend of the application.
+
+Modern applications are event-driven and not query-driven, therefore whenever there is an update,
+the application would like to receive a feedback. This package enables this kind of behaviour.
 
 Index
 -----
