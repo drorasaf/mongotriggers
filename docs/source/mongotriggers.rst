@@ -1,6 +1,7 @@
 MongoTriggers
 =============
 
-.. automodule:: mongotriggers.mongotriggers
+.. autoclass:: mongotriggers.mongotriggers.MongoTrigger
     :members:
+    :undoc-members:
     :show-inheritance:
