@@ -103,9 +103,11 @@ class MongoTrigger(object):
         self.trigger.unregister_delete_trigger(func, db_name, collection_name)
 
     def tail_oplog(self):
+        """Listens to oplog and fire the registered callbacks """
         self.trigger.start_tailing()
 
-    def stop(self):
+    def stop_tail(self):
+        """Stops listening to the oplog, no callbacks after calling this """
         self.trigger.stop_tailing()
 
 

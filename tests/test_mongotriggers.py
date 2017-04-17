@@ -8,45 +8,6 @@ import time
 
 
 @pytest.fixture
-def mongod_no_replica():
-    conn = pymongo.MongoClient(host='localhost', port=27018)
-
-    yield conn
-    conn.close()
-
-
-def test_not_replica(mongod_no_replica):
-    with pytest.raises(TypeError):
-        mongotriggers.MongoTrigger(mongod_no_replica)
-
-
-@pytest.fixture
-def mongos():
-    conn = pymongo.MongoClient(host='localhost', port=27020)
-
-    yield conn
-    conn.close()
-
-
-def test_mongos(mongos):
-    with pytest.raises(TypeError):
-        mongotriggers.MongoTrigger(mongos)
-
-
-@pytest.fixture
-def mongo_secondary(request):
-    conn = pymongo.MongoClient(host='localhost', port=27019)
-
-    yield conn
-    conn.close()
-
-
-def test_mongo_replica_secondary(mongo_secondary):
-    with pytest.raises(TypeError):
-        mongotriggers.MongoTrigger(mongo_secondary)
-
-
-@pytest.fixture
 def connection():
     conn = pymongo.MongoClient(host='localhost', port=27017)
 
@@ -72,7 +33,7 @@ def basic_trigger(trigger, func, *argfunc):
     func(*argfunc)
 
     time.sleep(3)
-    trigger.stop()
+    trigger.stop_tail()
     thread.join()
 
 
@@ -159,3 +120,44 @@ def test_tailing_from_specific_date(database, connection, capsys):
     basic_trigger(trigger, operation)
     out, err = capsys.readouterr()
     assert out == 'delete\n'
+
+
+@pytest.fixture
+def mongod_no_replica():
+    conn = pymongo.MongoClient(host='localhost', port=27018)
+
+    yield conn
+    conn.close()
+
+
+def test_not_replica(mongod_no_replica):
+    with pytest.raises(TypeError):
+        mongotriggers.MongoTrigger(mongod_no_replica)
+
+
+@pytest.fixture
+def mongos():
+    conn = pymongo.MongoClient(host='localhost', port=27020)
+
+    yield conn
+    conn.close()
+
+
+def test_mongos(mongos):
+    with pytest.raises(TypeError):
+        mongotriggers.MongoTrigger(mongos)
+
+
+@pytest.fixture
+def mongo_secondary(request):
+    conn = pymongo.MongoClient(host='localhost', port=27019)
+
+    yield conn
+    conn.close()
+
+
+def test_mongo_replica_secondary(mongo_secondary):
+    with pytest.raises(TypeError):
+        mongotriggers.MongoTrigger(mongo_secondary)
+
+
