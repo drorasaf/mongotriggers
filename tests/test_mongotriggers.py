@@ -22,7 +22,7 @@ def trigger(connection):
 
 
 @pytest.fixture(scope='function')
-def database(connection, request):
+def database(connection):
     connection.drop_database('test')
     yield connection['test']
 
@@ -197,7 +197,7 @@ def test_mongos(mongos):
 
 
 @pytest.fixture
-def mongo_secondary(request):
+def mongo_secondary():
     conn = pymongo.MongoClient(host='localhost', port=27019)
 
     yield conn
