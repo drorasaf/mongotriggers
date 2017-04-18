@@ -37,41 +37,56 @@ def basic_trigger(trigger, func, *argfunc):
     thread.join()
 
 
-def test_single_operation(database, trigger, capsys):
-    def print_op(op_doc):
-        print(op_doc['op'])
+def test_single_operation(database, trigger):
+    result_docs = []
+
+    def append_op(op_doc):
+        append_doc = {'op': op_doc['op'], 'ns': op_doc['ns'], }
+        result_docs.append(append_doc)
 
     def operation():
         database['any_trigger'].insert({'a': 1})
         database['any_trigger'].update({}, {'a': 2})
         database['any_trigger'].remove({'a': 2})
 
-    trigger.register_op_trigger(print_op, database.name, 'any_trigger')
+    trigger.register_op_trigger(append_op, database.name, 'any_trigger')
     basic_trigger(trigger, operation)
-    out, err = capsys.readouterr()
-    assert out == 'i\nu\nd\n'
-    trigger.unregister_op_trigger(print_op, database.name, 'any_trigger')
+    assert len(result_docs) == 3
+    assert result_docs[0]['op'] == 'i'
+    assert result_docs[1]['op'] == 'u'
+    assert result_docs[2]['op'] == 'd'
+
+    result_docs = []
+    trigger.unregister_op_trigger(append_op, database.name, 'any_trigger')
     basic_trigger(trigger, operation)
-    out, err = capsys.readouterr()
-    assert out == ''
+    assert len(result_docs) == 0
 
 
-def test_single_insert(database, trigger, capsys):
+def test_single_insert(database, trigger):
+    result_docs = []
+ 
     def insert(op_doc):
-        print('insert')
+        append_doc = {'op': op_doc['op'], 'ns': op_doc['ns'], }
+        result_docs.append(append_doc)
+
     trigger.register_insert_trigger(insert, database.name, 'insert_trigger')
     basic_trigger(trigger, database['insert_trigger'].insert, {'a': 1})
-    out, err = capsys.readouterr()
-    assert out == 'insert\n'
+    assert len(result_docs) == 1
+    assert result_docs[0]['op'] == 'i'
+    assert result_docs[0]['ns'] == 'test.insert_trigger'
+
+    result_docs = []
     trigger.unregister_insert_trigger(insert, database.name, 'insert_trigger')
     basic_trigger(trigger, database['insert_trigger'].insert, {'a': 1})
-    out, err = capsys.readouterr()
-    assert out == ''
+    assert len(result_docs) == 0
 
 
-def test_single_update(database, trigger, capsys):
+def test_single_update(database, trigger):
+    result_docs = []
+ 
     def update(op_doc):
-        print('update')
+        append_doc = {'op': op_doc['op'], 'ns': op_doc['ns'], }
+        result_docs.append(append_doc)
 
     def operations(database):
         database['update_trigger'].insert({'a': 1})
@@ -79,17 +94,22 @@ def test_single_update(database, trigger, capsys):
 
     trigger.register_update_trigger(update, database.name, 'update_trigger')
     basic_trigger(trigger, operations, database)
-    out, err = capsys.readouterr()
-    assert out == 'update\n'
+    assert len(result_docs) == 1
+    assert result_docs[0]['op'] == 'u'
+    assert result_docs[0]['ns'] == 'test.update_trigger'
+
+    result_docs = []
     trigger.unregister_update_trigger(update, database.name, 'update_trigger')
     basic_trigger(trigger, operations, database)
-    out, err = capsys.readouterr()
-    assert out == ''
+    assert len(result_docs) == 0
 
 
-def test_single_delete(database, trigger, capsys):
+def test_single_delete(database, trigger):
+    result_docs = []
+
     def delete(op_doc):
-        print('delete')
+        append_doc = {'op': op_doc['op'], 'ns': op_doc['ns'], }
+        result_docs.append(append_doc)
 
     def operations(database):
         database['delete_trigger'].insert({'a': 3})
@@ -97,17 +117,22 @@ def test_single_delete(database, trigger, capsys):
 
     trigger.register_delete_trigger(delete, database.name, 'delete_trigger')
     basic_trigger(trigger, operations, database)
-    out, err = capsys.readouterr()
-    assert out == 'delete\n'
+    assert len(result_docs) == 1
+    assert result_docs[0]['op'] == 'd'
+    assert result_docs[0]['ns'] == 'test.delete_trigger'
+
+    result_docs = []
     trigger.unregister_delete_trigger(delete, database.name, 'delete_trigger')
     basic_trigger(trigger, operations, database)
-    out, err = capsys.readouterr()
-    assert out == ''
+    assert len(result_docs) == 0
 
 
-def test_tailing_from_specific_date(database, connection, capsys):
+def test_tailing_from_specific_date(database, connection):
+    result_docs = []
+
     def delete(op_doc):
-        print('delete')
+        append_doc = {'op': op_doc['op'], 'ns': op_doc['ns'], }
+        result_docs.append(append_doc)
 
     def operation():
         pass
@@ -118,8 +143,31 @@ def test_tailing_from_specific_date(database, connection, capsys):
     trigger = mongotriggers.MongoTrigger(connection, since=now)
     trigger.register_delete_trigger(delete, database.name, 'delete_trigger')
     basic_trigger(trigger, operation)
-    out, err = capsys.readouterr()
-    assert out == 'delete\n'
+    assert len(result_docs) == 1
+    assert result_docs[0]['op'] == 'd'
+    assert result_docs[0]['ns'] == 'test.delete_trigger'
+
+
+def test_incorrect_database(database, trigger):
+    result_docs = []
+
+    def append_result(op_doc):
+        append_doc = {'op': op_doc['op'], 'ns': op_doc['ns'], }
+        result_docs.append(append_doc)
+
+    def operation():
+        database['any_trigger'].insert({'a': 1})
+        database['any_trigger'].update({}, {'a': 2})
+        database['any_trigger'].remove({'a': 2})
+
+    trigger.register_insert_trigger(append_result, database.name,
+        'insert_trigger')
+    trigger.register_update_trigger(append_result, database.name,
+        'update_trigger')
+    trigger.register_delete_trigger(append_result, database.name,
+        'delete_trigger')
+    basic_trigger(trigger, operation)
+    assert len(result_docs) == 0
 
 
 @pytest.fixture
@@ -159,5 +207,3 @@ def mongo_secondary(request):
 def test_mongo_replica_secondary(mongo_secondary):
     with pytest.raises(TypeError):
         mongotriggers.MongoTrigger(mongo_secondary)
-
-
