@@ -34,7 +34,8 @@ sys.path.insert(0, os.path.abspath('../..'))
 extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.coverage',
               'sphinx.ext.viewcode',
-              'sphinx.ext.napoleon']
+              'sphinx.ext.napoleon',
+              'sphinx.ext.intersphinx']
 
 napoleon_google_docstring = True
 
@@ -157,3 +158,7 @@ texinfo_documents = [
      author, 'mongotriggers', 'One line description of project.',
      'Miscellaneous'),
 ]
+
+intersphinx_mapping = {
+ 'python': ('https://docs.python.org/2', None),
+}
