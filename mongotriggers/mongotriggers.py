@@ -1,4 +1,4 @@
-from mongotriggers.mongodtriggers import MongodTrigger
+from .mongodtriggers import MongodTrigger
 
 """Class for manipulating notifications from MongoDB """
 
