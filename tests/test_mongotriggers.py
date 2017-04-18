@@ -64,7 +64,7 @@ def test_single_operation(database, trigger):
 
 def test_single_insert(database, trigger):
     result_docs = []
- 
+
     def insert(op_doc):
         append_doc = {'op': op_doc['op'], 'ns': op_doc['ns'], }
         result_docs.append(append_doc)
@@ -83,7 +83,7 @@ def test_single_insert(database, trigger):
 
 def test_single_update(database, trigger):
     result_docs = []
- 
+
     def update(op_doc):
         append_doc = {'op': op_doc['op'], 'ns': op_doc['ns'], }
         result_docs.append(append_doc)
@@ -161,11 +161,11 @@ def test_incorrect_database(database, trigger):
         database['any_trigger'].remove({'a': 2})
 
     trigger.register_insert_trigger(append_result, database.name,
-        'insert_trigger')
+                                    'insert_trigger')
     trigger.register_update_trigger(append_result, database.name,
-        'update_trigger')
+                                    'update_trigger')
     trigger.register_delete_trigger(append_result, database.name,
-        'delete_trigger')
+                                    'delete_trigger')
     basic_trigger(trigger, operation)
     assert len(result_docs) == 0
 
