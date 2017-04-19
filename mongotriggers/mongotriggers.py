@@ -1,4 +1,5 @@
 from .mongodtriggers import MongodTrigger
+import threading
 
 """Class for manipulating notifications from MongoDB """
 
@@ -16,6 +17,7 @@ class MongoTrigger(object):
             since (datetime) - the last timestamp to start listening from
         """
         self.trigger = MongodTrigger(conn, since)
+        self.thread = None
 
     def register_op_trigger(self, func, db_name=None, collection_name=None):
         """Watches the specified database and collections for any changes
@@ -103,8 +105,14 @@ class MongoTrigger(object):
 
     def tail_oplog(self):
         """Listens to oplog and fire the registered callbacks """
-        self.trigger.start_tailing()
+        if self.thread:
+            raise OSError("unable to tail using more than 1 thread")
+
+        self.thread = threading.Thread(target=self.trigger.start_tailing)
+        self.thread.start()
 
     def stop_tail(self):
         """Stops listening to the oplog, no callbacks after calling this """
         self.trigger.stop_tailing()
+        self.thread.join()
+        self.thread = None

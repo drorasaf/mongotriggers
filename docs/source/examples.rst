@@ -13,13 +13,14 @@ This example provides the simplest option for using the package.
 
     def notify_manager(op_document):
         print ('wake up! someone is adding me money')
-        triggers.stop_tail()
 
     client = MongoClient(host='localhost', port=27017)
     triggers = MongoTrigger(client)
-    triggers.register_insert_trigger(notify_manager, 'my_account', 'my_transactions')
+    triggers.register_op_trigger(notify_manager, 'my_account', 'my_transactions')
     triggers.tail_oplog()
     conn['my_account']['my_transactions'].insert_one({"balance": 1000})
+    triggers.stop_tail()
+   
 
 
 Tail from certain point in time
@@ -33,14 +34,17 @@ usually this will be helpful when persistency is required.
     from mongotrigger import MongoTrigger
     from pymongo import MongoClient
     from bson.timestamp import Timestamp
+    import time
 
     def notify_manager(op_document):
         print ('wake up! someone is adding me money')
-        triggers.stop_tail()
  
     client = MongoClient(host='localhost', port=27017)
+    conn['my_account']['my_transactions'].insert_one({"balance": 1000})
+    time.sleep(5)
     now = Timestamp(datetime.datetime.utcnow(), 0)
     triggers = MongoTrigger(client, since=now)
-    triggers.register_insert_trigger(notify_manager, 'my_account', 'my_transactions')
+    triggers.register_op_trigger(notify_manager, 'my_account', 'my_transactions')
     triggers.tail_oplog()
     conn['my_account']['my_transactions'].insert_one({"balance": 1000})
+    triggers.stop_tail()

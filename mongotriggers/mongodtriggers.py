@@ -66,19 +66,21 @@ class MongodTrigger(object):
 
     def start_tailing(self):
         # remove shard operations
-        query = {'fromMigrate': {'$exists': False}}
-        if self._start_time:
-            query.update({'ts': {'$gt': self._start_time}})
+        query = {'fromMigrate': {'$exists': False}, 'ts': {'$gt': self._start_time}}
 
         tailable_cur = self._oplog.find(query,
                                         cursor_type=CursorType.TAILABLE_AWAIT).sort('$natural', 1)
-        while tailable_cur.alive and self.keep_listening:
+        while tailable_cur.alive:
             try:
                 op = tailable_cur.next()
                 self._invoke_callbacks(op)
             except StopIteration:
+                if not self.keep_listening:
+                    break
+                # change it to be configurable
                 time.sleep(1)
 
+    # add option to regex namespaces
     def _invoke_callbacks(self, op_doc):
         for callback in self._callbacks:
             if op_doc['ns'] == callback['ns'] and op_doc['op'] == callback['op']:
