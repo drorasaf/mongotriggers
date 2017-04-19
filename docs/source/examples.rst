@@ -8,7 +8,7 @@ This example provides the simplest option for using the package.
 
 .. code-block:: python
 
-    from mongotrigger import MongoTrigger
+    from mongotriggers import MongoTrigger
     from pymongo import MongoClient
 
     def notify_manager(op_document):
@@ -22,7 +22,7 @@ This example provides the simplest option for using the package.
     triggers.tail_oplog()
 
     # make an operation to simulate interaction
-    conn['my_account']['my_transactions'].insert_one({"balance": 1000})
+    client['my_account']['my_transactions'].insert_one({"balance": 1000})
     triggers.stop_tail()
    
 
@@ -35,7 +35,7 @@ usually this will be helpful when persistency is required.
 
 .. code-block:: python
 
-    from mongotrigger import MongoTrigger
+    from mongotriggers import MongoTrigger
     from pymongo import MongoClient
     from bson.timestamp import Timestamp
     import time
@@ -46,7 +46,7 @@ usually this will be helpful when persistency is required.
     client = MongoClient(host='localhost', port=27017)
 
     # do something in collection to verify it is not called
-    conn['my_account']['my_transactions'].insert_one({"balance": 1000})
+    client['my_account']['my_transactions'].insert_one({"balance": 1000})
     # long waiting time due to timestamp
     time.sleep(5)
     now = Timestamp(datetime.datetime.utcnow(), 0)
@@ -57,5 +57,5 @@ usually this will be helpful when persistency is required.
     triggers.tail_oplog()
 
     # write to collection to verify we receive the callback
-    conn['my_account']['my_transactions'].insert_one({"balance": 1000})
+    client['my_account']['my_transactions'].insert_one({"balance": 1000})
     triggers.stop_tail()

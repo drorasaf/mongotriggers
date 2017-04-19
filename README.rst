@@ -51,19 +51,19 @@ Let's assume the system in development is a financial one, and every deletion in
 
 .. code-block:: python
 
- from mongotrigger import MongoTrigger
+ from mongotriggers import MongoTrigger
  from pymongo import MongoClient
 
  def notify_manager(op_document):
      print ('wake up! someone is adding me money')
-     triggers.stop_tail()
 
  client = MongoClient(host='localhost', port=27017)
  triggers = MongoTrigger(conn)
- triggers.register_insert_trigger(notify_manager, 'my_account', 'my_transactions')
+ triggers.register_op_trigger(notify_manager, 'my_account', 'my_transactions')
 
  triggers.tail_oplog()
- conn['my_account']['my_transactions'].insert_one({"balance": 1000})
+ client['my_account']['my_transactions'].insert_one({"balance": 1000})
+ triggers.stop_tail()
      
 
 Keep in mind that it is meant to run in a defered context in order to run endlessly until it is cancelled.
