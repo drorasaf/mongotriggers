@@ -38,11 +38,11 @@ Installer is available on PyPI. You can install it through pip::
     $ pip install mongotriggers
 
 Why should I use it?
-===========
+====================
 The best functionality is the one that another one is maintaining for you, as well as 100% code coverage.
 This package follows best practices as published by MongoDB: 
- - https://www.mongodb.com/blog/post/tailing-mongodb-oplog-sharded-clusters
- - https://www.mongodb.com/blog/post/pitfalls-and-workarounds-for-tailing-the-oplog-on-a-mongodb-sharded-cluster  
+- https://www.mongodb.com/blog/post/tailing-mongodb-oplog-sharded-clusters
+- https://www.mongodb.com/blog/post/pitfalls-and-workarounds-for-tailing-the-oplog-on-a-mongodb-sharded-cluster  
 
 How to use?
 ===========
@@ -64,7 +64,7 @@ Let's assume the system in development is a financial one, and every deletion in
  triggers.tail_oplog()
  client['my_account']['my_transactions'].insert_one({"balance": 1000})
  triggers.stop_tail()
-     
+
 
 Keep in mind that it is meant to run in a defered context in order to run endlessly until it is cancelled.
 
