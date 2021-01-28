@@ -58,7 +58,7 @@ Let's assume the system in development is a financial one, and every deletion in
      print ('wake up! someone is adding me money')
 
  client = MongoClient(host='localhost', port=27017)
- triggers = MongoTrigger(conn)
+ triggers = MongoTrigger(client)
  triggers.register_op_trigger(notify_manager, 'my_account', 'my_transactions')
 
  triggers.tail_oplog()
